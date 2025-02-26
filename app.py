@@ -73,7 +73,11 @@ def whatsapp_webhook():
             "text": {"body": bot_reply}
         }
 
-        requests.post(f"https://graph.facebook.com/v13.0/{PHONE_NUMBER_ID}/messages", headers=whatsapp_headers, json=whatsapp_payload)
+        # ✅ Send message to WhatsApp & print response
+        response = requests.post(f"https://graph.facebook.com/v17.0/{PHONE_NUMBER_ID}/messages", 
+                                 headers=whatsapp_headers, json=whatsapp_payload)
+        
+        print("🔹 WhatsApp API Response:", response.status_code, response.text)  # Debugging log
 
     return jsonify({"status": "success"}), 200
 
