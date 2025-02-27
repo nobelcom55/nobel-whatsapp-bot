@@ -62,21 +62,25 @@ def whatsapp_webhook():
         # ✅ Extract chatbot reply
         bot_reply = response_json.get("output", "Sorry, I didn't understand that.")
 
-        # ✅ Send reply back to WhatsApp
+        # ✅ Send reply back to WhatsApp (Using Meta's format)
         whatsapp_headers = {
             "Authorization": f"Bearer {WHATSAPP_TOKEN}",
             "Content-Type": "application/json"
         }
         whatsapp_payload = {
             "messaging_product": "whatsapp",
+            "recipient_type": "individual",
             "to": sender_id,
-            "text": {"body": bot_reply}
+            "type": "text",
+            "text": {
+                "body": bot_reply
+            }
         }
 
         # ✅ Send message to WhatsApp & print response
         response = requests.post(f"https://graph.facebook.com/v17.0/{PHONE_NUMBER_ID}/messages", 
                                  headers=whatsapp_headers, json=whatsapp_payload)
-        
+
         print("🔹 WhatsApp API Response:", response.status_code, response.text)  # Debugging log
 
     return jsonify({"status": "success"}), 200
